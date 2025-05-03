@@ -17,3 +17,16 @@ def validate_model(cls, model_id):
         abort(make_response(response, 404))
 
     return model
+
+def create_model_from_dict(cls, data):
+    try:
+        new_instance = cls.from_dict(data)
+
+    except KeyError as error:
+        response = {"message": f"Invalid request: missing {error.args[0]}"}
+        abort(make_response(response, 400))
+
+    db.session.add(new_instance)
+    db.session.commit()
+
+    return {"task": new_instance.to_dict()}, 201
