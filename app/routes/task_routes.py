@@ -1,8 +1,9 @@
-from flask import Blueprint, request, abort, make_response, Response
+from flask import Blueprint, request, Response
 from ..db import db
 from .route_utilities import validate_model, create_model_from_dict
 from app.models.task import Task
 from datetime import datetime
+import os, requests
 
 
 tasks_bp = Blueprint("tasks_bp", __name__, url_prefix = "/tasks")
@@ -63,6 +64,18 @@ def mark_complete_task(task_id):
 
     task.completed_at = datetime.today()
     db.session.commit()
+
+    slack_token = os.environ.get("SLACK_BOT_TOKEN")
+    headers = {
+    "Authorization": f"Bearer {slack_token}"
+    }
+
+    data = {
+            "channel": "#test-slack-api",
+            "text": f"Someone just completed the task {task.title}"
+        }
+    
+    requests.post("https://slack.com/api/chat.postMessage", headers=headers, json=data)
 
     return Response(status=204, mimetype="application/json")
 
