@@ -29,5 +29,7 @@ def create_model_from_dict(cls, data):
     db.session.add(new_instance)
     db.session.commit()
 
-    return {"task": new_instance.to_dict()}, 201
+    model_name = cls.__name__.lower() 
+    
+    return {model_name: new_instance.to_dict()}, 201
 
