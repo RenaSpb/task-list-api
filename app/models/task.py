@@ -1,6 +1,8 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, DateTime
 from datetime import datetime
+from typing import Optional
+from sqlalchemy import ForeignKey
 from ..db import db
 
 class Task(db.Model):
@@ -9,13 +11,20 @@ class Task(db.Model):
     description: Mapped[str]
     completed_at: Mapped[datetime | None] = mapped_column(nullable=True)
 
+    goal_id: Mapped[Optional[int]] = mapped_column(ForeignKey("goal.id"), nullable=True)
+    goal: Mapped[Optional["Goal"]] = relationship(back_populates="tasks")
+    
     def to_dict(self):
-        return {
-            "id": self.id,
-            "title": self.title,
-            "description": self.description,
-            "is_complete": self.completed_at is not None
-        }
+        task_dict = {
+        "id": self.id,
+        "title": self.title,
+        "description": self.description,
+        "is_complete": self.completed_at is not None
+    }
+        if self.goal_id:
+            task_dict["goal_id"] = self.goal_id
+   
+        return task_dict
 
     @classmethod
     def from_dict(cls, data):
