@@ -59,7 +59,7 @@ def add_tasks_to_goal(goal_id):
         task = validate_model(Task, task_id)
         task.goal_id = goal_id
 
-        tasks.append(tasks)
+        tasks.append(task)
     
     db.session.commit()
 
