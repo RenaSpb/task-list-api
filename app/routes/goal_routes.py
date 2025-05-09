@@ -50,29 +50,23 @@ def delete_goal(goal_id):
 @goals_bp.post("<goal_id>/tasks")
 def add_tasks_to_goal(goal_id):
     goal = validate_model(Goal, goal_id)
-    request_body = request.get_json()
+    task_ids = request.get_json().get("task_ids", [])
 
-    task_ids = request_body.get("task_ids", [])
-    tasks = []
-
-    for task_id in task_ids:
-        task = validate_model(Task, task_id)
-        task.goal_id = goal_id
-
-        tasks.append(task)
+    goal.tasks = [validate_model(Task, task_id) for task_id in task_ids]
     
     db.session.commit()
 
     return {
         "id": goal.id,
-        "task_ids": [task.id for task in tasks]
+        "task_ids": task_ids
     }, 200
+
     
 @goals_bp.get("<goal_id>/tasks")
 def get_tasks_for_goal(goal_id):
     goal = validate_model(Goal, goal_id)
 
     goal_dict = goal.to_dict()
-    goal_dict["tasks"] = [task.to_dict(include_goal_id=True) for task in goal.tasks]
+    goal_dict["tasks"] = [task.to_dict() for task in goal.tasks]
 
     return goal_dict, 200
