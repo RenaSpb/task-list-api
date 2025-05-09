@@ -26,6 +26,9 @@ def index():
     <body>
         <h1>Welcome to my Task List API!</h1>
         <p>My API is up and running on Render.</p>
+        <p>Enjoy</p>
+        <p>Have a good day!</p>
+        <p> :) </p>
     </body>
     </html>
     """
