@@ -5,7 +5,6 @@ from .routes.task_routes import tasks_bp
 from .routes.goal_routes import goals_bp 
 from .routes.base_routes import base_bp
 
-
 import os
 
 def create_app(config=None):
