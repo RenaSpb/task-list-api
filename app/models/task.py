@@ -9,9 +9,9 @@ class Task(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str] 
     description: Mapped[str]
-    completed_at: Mapped[datetime | None] = mapped_column(nullable=True)
+    completed_at: Mapped[datetime | None]
 
-goal_id: Mapped[Optional[int]] = mapped_column(ForeignKey("goal.id")
+    goal_id: Mapped[Optional[int]] = mapped_column(ForeignKey("goal.id"))
     goal: Mapped[Optional["Goal"]] = relationship(back_populates="tasks")
     
     def to_dict(self):
@@ -19,7 +19,7 @@ goal_id: Mapped[Optional[int]] = mapped_column(ForeignKey("goal.id")
         "id": self.id,
         "title": self.title,
         "description": self.description,
-        "is_complete": self.completed_at is not None
+        "is_complete": True if self.completed_at else False
     }
         if self.goal_id:
             task_dict["goal_id"] = self.goal_id
