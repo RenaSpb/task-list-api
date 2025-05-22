@@ -25,7 +25,7 @@ def get__all_goals():
 def get_goal_by_id(goal_id):
     goal = validate_model(Goal, goal_id)
 
-    return {"goal": goal.to_dict()}
+    return { "goal": goal.to_dict() }
 
 @goals_bp.put("<goal_id>")
 def update_goal_by_id(goal_id):
