@@ -23,7 +23,6 @@ def create_app(config=None):
     app.register_blueprint(tasks_bp)
     app.register_blueprint(goals_bp)
     app.register_blueprint(base_bp)
-    
 
     return app
     
